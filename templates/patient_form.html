@@ -1,0 +1,115 @@
+
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="form-wrap">
+
+  <a href="{{ url_for('index') }}" class="back-link">← Back to records</a>
+
+  <div class="mb-4 mt-3">
+    <p class="eyebrow mb-1">PATIENT DETAILS</p>
+    <h1 class="h2 fw-bold">{{ page_title }}</h1>
+    <p class="text-secondary">
+      Enter the details below. The app validates the data before saving.
+    </p>
+  </div>
+
+  {% if errors %}
+  <div class="alert alert-danger">
+    <strong>Please correct these errors:</strong>
+    <ul class="mb-0 mt-2">
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <form method="post" class="card border-0 shadow-sm p-4 p-lg-5">
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Full name *</label>
+        <input class="form-control"
+               name="full_name"
+               maxlength="100"
+               required
+               value="{{ patient['full_name'] if patient else '' }}"
+               placeholder="Enter full name">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Date of birth *</label>
+        <input class="form-control"
+               name="date_of_birth"
+               required
+               value="{{ patient['date_of_birth'] if patient else '' }}"
+               placeholder="dd/mm/yyyy">
+        <div class="form-text">
+          Use dd/mm/yyyy. The supplied dd.mm.yyyy format is also accepted.
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Email address *</label>
+        <input class="form-control"
+               type="text"
+               name="email"
+               required
+               value="{{ patient['email'] if patient else '' }}"
+               placeholder="name@example.com">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Glucose *</label>
+        <input class="form-control"
+               name="glucose"
+               type="number"
+               min="0"
+               step="any"
+               required
+               value="{{ patient['glucose'] if patient else '' }}">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Haemoglobin *</label>
+        <input class="form-control"
+               name="haemoglobin"
+               type="number"
+               min="0"
+               step="any"
+               required
+               value="{{ patient['haemoglobin'] if patient else '' }}">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Cholesterol *</label>
+        <input class="form-control"
+               name="cholesterol"
+               type="number"
+               min="0"
+               step="any"
+               required
+               value="{{ patient['cholesterol'] if patient else '' }}">
+      </div>
+
+    </div>
+
+    <div class="alert alert-info mt-4 mb-4 small">
+      <strong>AI notice:</strong>
+      Blood-test units and fasting status are not collected here.
+      AI remarks are educational only and must not be used to diagnose
+      or treat a condition.
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <a href="{{ url_for('index') }}" class="btn btn-light">Cancel</a>
+      <button class="btn btn-primary px-4" type="submit">
+        Save patient
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

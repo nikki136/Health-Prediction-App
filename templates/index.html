@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Patient records{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div><p class="eyebrow mb-1">HEALTH RECORDS</p><h1 class="h2 fw-bold mb-1">Patient management</h1>
+  <p class="text-secondary mb-0">Create, review, update and remove patient records.</p></div>
+  <a class="btn btn-primary px-4" href="{{ url_for('add_patient') }}">＋ Add patient</a>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-sm-4"><div class="stat-card"><span>Total records</span><strong>{{ patients|length }}</strong></div></div>
+  <div class="col-sm-8"><div class="stat-card note-card"><span>AI assistance</span><strong class="fs-6">Remarks are generated using Gemini when configured, otherwise a labelled fallback is used.</strong></div></div>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white border-0 pt-4 px-4"><h2 class="h5 fw-semibold mb-0">All patient records</h2></div>
+  <div class="card-body p-0">
+    {% if patients %}
+    <div class="table-responsive">
+      <table class="table align-middle table-hover mb-0">
+        <thead><tr><th>ID</th><th>Patient</th><th>Date of birth</th><th>Email</th><th>Glucose</th><th>Haemoglobin</th><th>Cholesterol</th><th>AI remarks</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for p in patients %}
+          <tr>
+            <td class="text-secondary">{{ p.id }}</td><td class="fw-semibold">{{ p.full_name }}</td>
+            <td>{{ p.date_of_birth }}</td><td>{{ p.email }}</td>
+            <td>{{ p.glucose }}</td>
+            <td>{{ p.haemoglobin }}</td>
+            <td>{{ p.cholesterol }}</td>
+            <td class="remarks-cell">{{ p.remarks }}</td>
+            <td><div class="d-flex gap-2">
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('edit_patient', patient_id=p.id) }}">Edit</a>
+              <form method="post" action="{{ url_for('remove_patient', patient_id=p.id) }}" onsubmit="return confirm('Delete this patient record?');">
+                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+              </form>
+            </div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-state"><div class="empty-icon">＋</div><h3 class="h5">No records yet</h3><p class="text-secondary">Add your first patient to get started.</p><a href="{{ url_for('add_patient') }}" class="btn btn-primary">Add patient</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
